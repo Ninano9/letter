@@ -123,8 +123,8 @@
             }
 
             to {
-                transform: translate(calc(0px + (2 * var(--x))), 5px);
-                /* 랜덤한 x 이동 거리 */
+                transform: translate(calc(-50px * var(--x)), 15px);
+                /* Adjusted to move left */
                 opacity: 0;
             }
         }
@@ -157,38 +157,68 @@
         // 클릭 시 하트 애니메이션 및 메시지 표시
         heartContainer.addEventListener('click', () => {
             heartContainer.classList.toggle('active'); // 클릭할 때마다 하트가 커지거나 원래 크기로 돌아옵니다.
+            triggerFireworks(); // 폭죽 애니메이션 실행
         });
 
         // 돈이 자동으로 떨어지도록 설정
         function dropMoney() {
             const money = document.createElement('div');
             money.classList.add('money');
-
-            // x 방향 랜덤 이동을 위한 CSS 변수 설정
-            const randomX = (Math.random() * 100 - 50); // -50px에서 +50px까지 랜덤 이동
-            money.style.setProperty('--x', randomX + 'px'); // CSS 변수를 통해 랜덤 이동 값 전달
-
-            // 지폐의 시작 위치를 하트 아래쪽으로 설정
-            money.style.left = '68%'; // 왼팔의 끝 위치 기준으로 약간 조정
-            money.style.top = '80%'; // 왼팔의 위치에 맞춰서 조정
+            money.style.left = '68%'; // Adjusted starting position
+            money.style.top = '80%';  // Adjusted according to the position of the left arm
             heartContainer.appendChild(money);
 
-            // 지폐가 떨어지는 애니메이션
+            // Set a negative value for --x
+            const xValue = 1; // Move to the left
+            money.style.setProperty('--x', xValue);
+
+            // Trigger the animation
             setTimeout(() => {
                 money.style.animation = 'fall 1s forwards';
             }, 10);
 
-            // 1초 후 지폐 제거
+            // Remove the money after 1 second
             setTimeout(() => {
                 money.remove();
             }, 1000);
         }
 
         // 페이지 로드 시 돈이 떨어지도록 설정
-        dropMoney();
+        setInterval(dropMoney, 450); // 450ms마다 돈 떨어짐
 
-        // 5초마다 돈이 떨어지도록 설정 (필요에 따라 조정)
-        setInterval(dropMoney, 450);
+        // 폭죽 효과 생성
+        function triggerFireworks() {
+            // 3번의 폭죽 효과
+            for (let j = 0; j < 3; j++) {
+                setTimeout(() => {
+                    // 폭죽 효과 생성
+                    for (let i = 0; i < 20; i++) {
+                        const particle = document.createElement('div');
+                        particle.classList.add('particle');
+                        // 각 파티클의 색상과 방향을 랜덤으로 설정
+                        const colors = ['#ff4d4d', '#ffcc00', '#66ff66', '#3399ff', '#cc66ff'];
+                        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                        // 랜덤한 x, y 위치 계산
+                        const angle = Math.random() * 2 * Math.PI;
+                        const x = Math.cos(angle);
+                        const y = Math.sin(angle);
+                        particle.style.setProperty('--x', x);
+                        particle.style.setProperty('--y', y);
+
+                        // 파티클의 초기 위치 설정
+                        particle.style.left = '50%';
+                        particle.style.top = '50%';
+                        heartContainer.appendChild(particle);
+
+                        // 1.5초 후 파티클 제거
+                        setTimeout(() => {
+                            particle.remove();
+                        }, 1500); // 파티클 제거 시간
+                    }
+                }, j * 300); // 3번의 폭죽을 300ms 간격으로 터뜨림
+            }
+        }
     </script>
 </body>
 
