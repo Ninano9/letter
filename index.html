@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +24,8 @@
         }
 
         .heart-container.active {
-            transform: scale(1.5); /* 하트가 커지는 효과 */
+            transform: scale(1.5);
+            /* 하트가 커지는 효과 */
         }
 
         .heart-svg {
@@ -39,12 +41,14 @@
             stroke-linejoin: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: draw 22s ease forwards; /* 하트 그리기 애니메이션 */
+            animation: draw 22s ease forwards;
+            /* 하트 그리기 애니메이션 */
         }
 
         @keyframes draw {
             to {
-                stroke-dashoffset: 0; /* 하트 그리기 애니메이션 완료 시 */
+                stroke-dashoffset: 0;
+                /* 하트 그리기 애니메이션 완료 시 */
             }
         }
 
@@ -55,11 +59,13 @@
             transform: translate(-50%, -50%);
             font-size: 24px;
             opacity: 0;
-            transition: opacity 1s ease; /* 메시지 표시 애니메이션 */
+            transition: opacity 1s ease;
+            /* 메시지 표시 애니메이션 */
         }
 
         .heart-container.active .message {
-            opacity: 1; /* 하트 클릭 시 메시지 표시 */
+            opacity: 1;
+            /* 하트 클릭 시 메시지 표시 */
         }
 
         /* 폭죽 효과를 위한 파티클 스타일 */
@@ -69,69 +75,121 @@
             height: 5px;
             border-radius: 50%;
             background-color: red;
-            animation: explode 1s ease forwards; /* 폭죽 애니메이션 */
+            animation: explode 1s ease forwards;
+            /* 폭죽 애니메이션 */
         }
 
         @keyframes explode {
             from {
                 transform: scale(1) translate(0, 0);
-                opacity: 1; /* 폭죽 시작 시 */
+                opacity: 1;
+                /* 폭죽 시작 시 */
             }
+
             to {
-                transform: scale(0.5) translate(calc(200px * var(--x)), calc(200px * var(--y))); /* 폭죽 퍼짐 */
-                opacity: 0; /* 폭죽 사라짐 */
+                transform: scale(0.5) translate(calc(200px * var(--x)), calc(200px * var(--y)));
+                /* 폭죽 퍼짐 */
+                opacity: 0;
+                /* 폭죽 사라짐 */
+            }
+        }
+
+        /* 캐릭터 스타일 */
+        .character {
+            position: absolute;
+            bottom: 80px;
+            right: 131px;
+            width: 50px;
+            /* 캐릭터 크기 조정 */
+            height: 80px;
+            /* 캐릭터 크기 조정 */
+        }
+
+        /* 지폐 스타일 */
+        .money {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            background-color: green;
+            border-radius: 2px;
+            opacity: 0;
+            animation: fall 1s forwards;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translate(0, -10px);
+                opacity: 1;
+            }
+
+            to {
+                transform: translate(calc(0px + (2 * var(--x))), 5px);
+                /* 랜덤한 x 이동 거리 */
+                opacity: 0;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="heart-container" id="heart-container">
         <svg viewBox="0 0 24 24" class="heart-svg">
-            <path class="heart-path" d="M12 21s-8.5-7.4-8.5-11.6S6.4 2.5 12 7.3c5.6-4.8 8.5-2.3 8.5 2.1S12 21 12 21z"/>
+            <path class="heart-path" d="M12 21s-8.5-7.4-8.5-11.6S6.4 2.5 12 7.3c5.6-4.8 8.5-2.3 8.5 2.1S12 21 12 21z" />
         </svg>
         <div class="message">
             어머니, 생신 축하드립니다! 사랑해요💖
         </div>
+
+        <!-- 귀여운 캐릭터 -->
+        <svg class="character" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+            <circle cx="32" cy="12" r="10" fill="#FFD700" /> <!-- 머리 -->
+            <rect x="28" y="20" width="8" height="20" fill="#8B4513" /> <!-- 몸 -->
+            <line x1="28" y1="25" x2="15" y2="30" stroke="#8B4513" stroke-width="4" /> <!-- 왼팔 -->
+            <line x1="36" y1="25" x2="49" y2="30" stroke="#8B4513" stroke-width="4" /> <!-- 오른팔 -->
+            <line x1="28" y1="40" x2="20" y2="60" stroke="#8B4513" stroke-width="4" /> <!-- 왼다리 -->
+            <line x1="36" y1="40" x2="44" y2="60" stroke="#8B4513" stroke-width="4" /> <!-- 오른다리 -->
+        </svg>
     </div>
 
     <script>
         const heartContainer = document.getElementById('heart-container');
 
+        // 클릭 시 하트 애니메이션 및 메시지 표시
         heartContainer.addEventListener('click', () => {
             heartContainer.classList.toggle('active'); // 클릭할 때마다 하트가 커지거나 원래 크기로 돌아옵니다.
-
-            // 3번의 폭죽 효과
-            for (let j = 0; j < 3; j++) {
-                setTimeout(() => {
-                    // 폭죽 효과 생성
-                    for (let i = 0; i < 20; i++) {
-                        const particle = document.createElement('div');
-                        particle.classList.add('particle');
-
-                        // 각 파티클의 색상과 방향을 랜덤으로 설정
-                        const colors = ['#ff4d4d', '#ffcc00', '#66ff66', '#3399ff', '#cc66ff'];
-                        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-                        // 랜덤한 x, y 위치 계산
-                        const angle = Math.random() * 2 * Math.PI;
-                        const x = Math.cos(angle);
-                        const y = Math.sin(angle);
-                        particle.style.setProperty('--x', x);
-                        particle.style.setProperty('--y', y);
-
-                        // 파티클의 초기 위치 설정
-                        particle.style.left = '50%';
-                        particle.style.top = '50%';
-                        heartContainer.appendChild(particle);
-
-                        // 1.5초 후 파티클 제거
-                        setTimeout(() => {
-                            particle.remove();
-                        }, 1500); // 파티클 제거 시간
-                    }
-                }, j * 300); // 3번의 폭죽을 300ms 간격으로 터뜨림
-            }
         });
+
+        // 돈이 자동으로 떨어지도록 설정
+        function dropMoney() {
+            const money = document.createElement('div');
+            money.classList.add('money');
+
+            // x 방향 랜덤 이동을 위한 CSS 변수 설정
+            const randomX = (Math.random() * 100 - 50); // -50px에서 +50px까지 랜덤 이동
+            money.style.setProperty('--x', randomX + 'px'); // CSS 변수를 통해 랜덤 이동 값 전달
+
+            // 지폐의 시작 위치를 하트 아래쪽으로 설정
+            money.style.left = '68%'; // 왼팔의 끝 위치 기준으로 약간 조정
+            money.style.top = '80%'; // 왼팔의 위치에 맞춰서 조정
+            heartContainer.appendChild(money);
+
+            // 지폐가 떨어지는 애니메이션
+            setTimeout(() => {
+                money.style.animation = 'fall 1s forwards';
+            }, 10);
+
+            // 1초 후 지폐 제거
+            setTimeout(() => {
+                money.remove();
+            }, 1000);
+        }
+
+        // 페이지 로드 시 돈이 떨어지도록 설정
+        dropMoney();
+
+        // 5초마다 돈이 떨어지도록 설정 (필요에 따라 조정)
+        setInterval(dropMoney, 450);
     </script>
 </body>
+
 </html>
