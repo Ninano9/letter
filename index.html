@@ -1,89 +1,137 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>축하 페이지</title>
-	<style>
-		body {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100vh;
-			background-color: #ffe6e6;
-			margin: 0;
-		}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>축하 페이지</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe6e6;
+            margin: 0;
+        }
 
-		.heart-container {
-			width: 600px;
-			height: 600px;
-			position: relative;
-			transition: transform 1s ease;
-			/* 클릭시 변형 */
-		}
+        .heart-container {
+            width: 600px;
+            height: 600px;
+            position: relative;
+            transition: transform 1s ease;
+        }
 
-		.heart-container.active {
-			transform: scale(1.5);
-			/* 하트가 커지는 효과 */
-		}
+        .heart-container.active {
+            transform: scale(1.5); /* 하트가 커지는 효과 */
+        }
 
-		.heart-svg {
-			width: 100%;
-			height: 100%;
-		}
+        .heart-svg {
+            width: 100%;
+            height: 100%;
+        }
 
-		.heart-path {
-			fill: none;
-			stroke: red;
-			stroke-width: 1;
-			stroke-linecap: round;
-			stroke-linejoin: round;
-			stroke-dasharray: 1000;
-			stroke-dashoffset: 1000;
-			animation: draw 22s ease forwards;
-		}
+        .heart-path {
+            fill: none;
+            stroke: red;
+            stroke-width: 1;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 22s ease forwards; /* 하트 그리기 애니메이션 */
+        }
 
-		@keyframes draw {
-			to {
-				stroke-dashoffset: 0;
-			}
-		}
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0; /* 하트 그리기 애니메이션 완료 시 */
+            }
+        }
 
-		.message {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			font-size: 24px;
-			opacity: 0;
-			transition: opacity 1s ease;
-		}
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 1s ease; /* 메시지 표시 애니메이션 */
+        }
 
-		.heart-container.active .message {
-			opacity: 1;
-		}
-	</style>
+        .heart-container.active .message {
+            opacity: 1; /* 하트 클릭 시 메시지 표시 */
+        }
+
+        /* 폭죽 효과를 위한 파티클 스타일 */
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: red;
+            animation: explode 1s ease forwards; /* 폭죽 애니메이션 */
+        }
+
+        @keyframes explode {
+            from {
+                transform: scale(1) translate(0, 0);
+                opacity: 1; /* 폭죽 시작 시 */
+            }
+            to {
+                transform: scale(0.5) translate(calc(200px * var(--x)), calc(200px * var(--y))); /* 폭죽 퍼짐 */
+                opacity: 0; /* 폭죽 사라짐 */
+            }
+        }
+    </style>
 </head>
-
 <body>
-	<div class="heart-container" id="heart-container">
-		<svg viewBox="0 0 24 24" class="heart-svg">
-			<path class="heart-path" d="M12 21s-8.5-7.4-8.5-11.6S6.4 2.5 12 7.3c5.6-4.8 8.5-2.3 8.5 2.1S12 21 12 21z" />
-		</svg>
-		<div class="message">
-			어머니, 생신 축하드립니다! 사랑해요💖
-		</div>
-	</div>
+    <div class="heart-container" id="heart-container">
+        <svg viewBox="0 0 24 24" class="heart-svg">
+            <path class="heart-path" d="M12 21s-8.5-7.4-8.5-11.6S6.4 2.5 12 7.3c5.6-4.8 8.5-2.3 8.5 2.1S12 21 12 21z"/>
+        </svg>
+        <div class="message">
+            어머니, 생신 축하드립니다! 사랑해요💖
+        </div>
+    </div>
 
-	<script>
-		const heartContainer = document.getElementById('heart-container');
+    <script>
+        const heartContainer = document.getElementById('heart-container');
 
-		heartContainer.addEventListener('click', () => {
-			heartContainer.classList.toggle('active'); // 클릭할 때마다 하트가 커지거나 원래 크기로 돌아옵니다.
-		});
-	</script>
+        heartContainer.addEventListener('click', () => {
+            heartContainer.classList.toggle('active'); // 클릭할 때마다 하트가 커지거나 원래 크기로 돌아옵니다.
+
+            // 3번의 폭죽 효과
+            for (let j = 0; j < 3; j++) {
+                setTimeout(() => {
+                    // 폭죽 효과 생성
+                    for (let i = 0; i < 20; i++) {
+                        const particle = document.createElement('div');
+                        particle.classList.add('particle');
+
+                        // 각 파티클의 색상과 방향을 랜덤으로 설정
+                        const colors = ['#ff4d4d', '#ffcc00', '#66ff66', '#3399ff', '#cc66ff'];
+                        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                        // 랜덤한 x, y 위치 계산
+                        const angle = Math.random() * 2 * Math.PI;
+                        const x = Math.cos(angle);
+                        const y = Math.sin(angle);
+                        particle.style.setProperty('--x', x);
+                        particle.style.setProperty('--y', y);
+
+                        // 파티클의 초기 위치 설정
+                        particle.style.left = '50%';
+                        particle.style.top = '50%';
+                        heartContainer.appendChild(particle);
+
+                        // 1.5초 후 파티클 제거
+                        setTimeout(() => {
+                            particle.remove();
+                        }, 1500); // 파티클 제거 시간
+                    }
+                }, j * 300); // 3번의 폭죽을 300ms 간격으로 터뜨림
+            }
+        });
+    </script>
 </body>
-
 </html>
